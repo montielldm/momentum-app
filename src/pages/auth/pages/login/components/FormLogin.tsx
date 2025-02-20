@@ -15,10 +15,12 @@ import { Input } from "@/components/ui/input"
 import { Link } from "react-router-dom"
 import { EyeOff, Eye, IdCard } from "lucide-react"
 import { useState } from "react"
+import useSignInMutation from "../hooks/useSignInMutation"
 
 export default function FormLogin() {
     const [ isVisible, setIsVisible ] = useState<boolean>(false)
-    
+    const { mutate } = useSignInMutation()
+
     const form = useForm<z.infer<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -28,7 +30,12 @@ export default function FormLogin() {
     })
 
     function onSubmit(values: z.infer<typeof loginSchema>) {
-        console.log(values)
+        const formData = new FormData()
+
+        formData.append('document', values.document)
+        formData.append('password', values.password)
+
+        mutate(formData)
     }
 
     const toggleVisibility = () => setIsVisible((prevState) => !prevState);
