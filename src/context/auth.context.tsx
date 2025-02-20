@@ -44,7 +44,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Guardar usuario y tokens
   const saveUser = useCallback((userData: AuthResponse) => {
     setAccessTokenAndRefreshToken(userData.access_token, userData.refresh_token);
-    console.log(userData.user)
     setUser(userData.user);
     setIsAuthenticated(true);
   }, []);
@@ -52,7 +51,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Establecer tokens y actualizar headers de Axios
   const setAccessTokenAndRefreshToken = useCallback((accessToken: string, refreshToken: string) => {
     setAccessToken(accessToken);
-    secureStorage.set("token", refreshToken );
+    secureStorage.set("token", refreshToken);
     api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
   }, []);
 
@@ -66,6 +65,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const getNewAccessToken = useCallback(async (refreshToken: string) => {
     try {
       const token = await requestNewAccessToken(refreshToken);
+      if (token) {
+        setAccessToken(token); // Actualiza el access token en el estado
+        secureStorage.set("token", refreshToken); // Almacena el nuevo refresh token
+        api.defaults.headers.common["Authorization"] = `Bearer ${token}`; // Actualiza los headers de Axios
+      }
       return token;
     } catch (error) {
       signout();
@@ -97,9 +101,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
           const newToken = await getNewAccessToken(getRefreshToken()!);
           if (newToken) {
-            setAccessToken(newToken);
             originalRequest.headers.Authorization = `Bearer ${newToken}`;
-            return api(originalRequest);
+            return api(originalRequest); // Reintenta la solicitud original
           }
         }
         return Promise.reject(error);
@@ -131,7 +134,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(userInfo);
       setIsAuthenticated(true);
     } catch (error) {
-      console.log("error: ", error)
+      console.log("Error en checkAuth:", error);
       signout();
     } finally {
       setIsLoading(false);
@@ -173,6 +176,7 @@ async function retrieveUserInfo(accessToken: string) {
     }
   } catch (error) {
     console.error("Error retrieving user info:", error);
+    throw error; // Propaga el error para manejarlo en checkAuth
   }
 }
 
