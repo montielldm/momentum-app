@@ -11,12 +11,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import {
-    BoltIcon,
     BookOpenIcon,
-    ChevronDownIcon,
-    Layers2Icon,
     LogOutIcon,
-    PinIcon,
     UserPenIcon,
 } from "lucide-react";
 import { useAuth } from "@/context/auth.context";
