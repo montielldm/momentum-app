@@ -8,6 +8,7 @@ import ForgotPassword from "@/pages/auth/pages/forgot-password/ForgotPassword"
 import ResetPassword from "@/pages/auth/pages/reset-password/ResetPassword"
 import GroupsPage from "@/pages/protected/pages/groups/GroupsPage"
 import LayoutProtected from "@/pages/protected/LayoutProtected"
+import SettingsPage from "@/pages/protected/pages/settings/SettingsPage"
 
 export default function AppRouting() {
   return (
@@ -19,6 +20,7 @@ export default function AppRouting() {
         </Route>
         <Route element={<LayoutProtected />}>
           <Route path="/app/groups" element={<GroupsPage />} />
+          <Route path="/app/settings" element={<SettingsPage />} />
         </Route>
     </Routes>
   )
