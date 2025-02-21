@@ -14,6 +14,7 @@ export interface User {
     name: string;
     lastname: string
     avatar: string
+    email: string
 }
 
 export interface AccessTokenResponse {
