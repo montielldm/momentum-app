@@ -29,7 +29,7 @@ export default function UserMenu() {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="cursor-pointer h-[28px] p-0 hover:bg-transparent focus-visible:outline-none focus-visible:ring-0">
-                    <Avatar>
+                    <Avatar className="border">
                         <AvatarImage src={user?.avatar} alt="Profile image" />
                         <AvatarFallback>KK</AvatarFallback>
                     </Avatar>

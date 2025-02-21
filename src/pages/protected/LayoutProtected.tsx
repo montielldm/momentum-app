@@ -11,8 +11,8 @@ export default function LayoutProtected() {
         <SidebarProvider>
             <AppSidebar />
             <main className='w-full h-screen'>
-                <div className='p-2 border-b flex items-center justify-between'>
-                    <SidebarTrigger className='cursor-pointer' />
+                <div className='py-2 pl-2 pr-4 border-b flex items-center justify-between'>
+                    <SidebarTrigger className='cursor-pointer shadow-none'  variant="outline" />
                     <UserMenu />
                 </div>
                 <div className='p-4 bg-neutral-50 h-screen-main'>
