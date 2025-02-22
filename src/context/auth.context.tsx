@@ -97,8 +97,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         getUser,
         signout,
       }}
-    >
-      {isAuthenticated && children}
+    > 
+      {isLoading ? <div>Cargando...</div> : children}
     </AuthContext.Provider>
   );
 }
