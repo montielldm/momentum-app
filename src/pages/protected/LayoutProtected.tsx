@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 export default function LayoutProtected() {
     const navigate = useNavigate()    
     const { isAuthenticated } = useAuth()
+    console.log(isAuthenticated)
 
     useEffect(() => {
         if (!isAuthenticated) {
