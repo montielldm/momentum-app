@@ -1,14 +1,21 @@
 import { Outlet } from 'react-router-dom'
 import { useAuth } from '@/context/auth.context'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 export default function LayoutAuth() {
+  const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/app/groups");
+    }
+  }, [isAuthenticated, navigate]);
+
   return (
-    isAuthenticated ? Navigate({ to: "/app/groups"}) : (
-      <div className='w-full h-screen p-4'>
-        <Outlet />
-      </div>
-    ) 
+    <div className='w-full h-screen p-4'>
+      <Outlet />
+    </div>
   )
 }

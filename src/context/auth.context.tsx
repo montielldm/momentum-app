@@ -1,18 +1,7 @@
 import { useContext, createContext, useState, useEffect, useCallback } from "react";
 import type { AuthResponse, User } from "@/types/auth.types";
 import { api } from "@/helpers/axios.instance";
-import requestNewAccessToken from "@/helpers/axios.instance";
-
-// Almacenamiento seguro (encriptación básica)
-const secureStorage = {
-  set: (key: string, value: string) =>
-    localStorage.setItem(key, window.btoa(JSON.stringify(value))),
-  get: (key: string) => {
-    const item = localStorage.getItem(key);
-    return item ? JSON.parse(window.atob(item)) : null;
-  },
-  remove: (key: string) => localStorage.removeItem(key),
-};
+import { secureStorage } from "@/helpers/storage.secure";
 
 // Definición del contexto
 interface AuthContextType {
@@ -51,31 +40,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Establecer tokens y actualizar headers de Axios
   const setAccessTokenAndRefreshToken = useCallback((accessToken: string, refreshToken: string) => {
     setAccessToken(accessToken);
-    secureStorage.set("token", refreshToken);
-    api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    secureStorage.set("refresh_token", refreshToken);
+    secureStorage.set("access_token", accessToken);
   }, []);
 
   // Obtener el refresh token
   const getRefreshToken = useCallback(() => {
-    const token = secureStorage.get("token");
-    return token || null;
-  }, []);
-
-  // Obtener un nuevo access token usando el refresh token
-  const getNewAccessToken = useCallback(async (refreshToken: string) => {
-    try {
-      const token = await requestNewAccessToken(refreshToken);
-      if (token) {
-        setAccessToken(token); // Actualiza el access token en el estado
-        secureStorage.set("token", refreshToken); // Almacena el nuevo refresh token
-        api.defaults.headers.common["Authorization"] = `Bearer ${token}`; // Actualiza los headers de Axios
-      }
-      return token;
-    } catch (error) {
-      signout();
-      window.location.href = "/auth/login";
-      return null;
-    }
+    return secureStorage.get("refresh_token") || null;
   }, []);
 
   // Obtener información del usuario
@@ -83,54 +54,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Cerrar sesión
   const signout = useCallback(() => {
-    secureStorage.remove("token");
+    secureStorage.remove("refresh_token");
+    secureStorage.remove("access_token");
     setAccessToken("");
     setUser(undefined);
     setIsAuthenticated(false);
     delete api.defaults.headers.common["Authorization"];
   }, []);
 
-  // Interceptor para manejar tokens expirados
-  useEffect(() => {
-    const interceptor = api.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        const originalRequest = error.config;
-        if (error.response?.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
-
-          const newToken = await getNewAccessToken(getRefreshToken()!);
-          if (newToken) {
-            originalRequest.headers.Authorization = `Bearer ${newToken}`;
-            return api(originalRequest); // Reintenta la solicitud original
-          }
-        }
-        return Promise.reject(error);
-      }
-    );
-
-    return () => {
-      api.interceptors.response.eject(interceptor);
-    };
-  }, [getNewAccessToken, getRefreshToken]);
-
   // Verificar autenticación al montar el componente
   const checkAuth = useCallback(async () => {
     try {
-      const token = secureStorage.get("token");
+      const token = secureStorage.get("access_token");
       if (!token) {
         setIsLoading(false);
         return;
       }
 
-      let validToken: string | null = accessToken;
-      if (!validToken) {
-        validToken = await getNewAccessToken(token);
-        if (!validToken) throw new Error("Refresh failed");
-        setAccessToken(validToken);
-      }
-
-      const userInfo = await retrieveUserInfo(validToken);
+      const userInfo = await retrieveUserInfo(token);
       setUser(userInfo);
       setIsAuthenticated(true);
     } catch (error) {
@@ -139,7 +80,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [accessToken, getNewAccessToken, signout]);
+  }, [signout]);
 
   useEffect(() => {
     checkAuth();
@@ -157,7 +98,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         signout,
       }}
     >
-      {isLoading ? <div>Loading...</div> : children}
+      {isAuthenticated && children}
     </AuthContext.Provider>
   );
 }
@@ -176,7 +117,7 @@ async function retrieveUserInfo(accessToken: string) {
     }
   } catch (error) {
     console.error("Error retrieving user info:", error);
-    throw error; // Propaga el error para manejarlo en checkAuth
+    throw error;
   }
 }
 
