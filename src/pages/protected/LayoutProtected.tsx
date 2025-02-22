@@ -4,9 +4,19 @@ import { SidebarProvider } from '@/components/ui/sidebar'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { AppSidebar } from './components/AppSidebar'
 import UserMenu from './components/UserMenu'
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 export default function LayoutProtected() {
+    const navigate = useNavigate()    
     const { isAuthenticated } = useAuth()
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+          navigate("/auth/login");
+        }
+    }, [isAuthenticated, navigate]);
+
     return (
         <SidebarProvider>
             <AppSidebar />
@@ -16,7 +26,7 @@ export default function LayoutProtected() {
                     <UserMenu />
                 </div>
                 <div className='p-4 bg-neutral-50 h-screen-main'>
-                    {isAuthenticated ? <Outlet /> : Navigate({to: "/auth/login"})}
+                    <Outlet />
                 </div>
             </main>
         </SidebarProvider>
