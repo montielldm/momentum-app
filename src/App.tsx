@@ -6,6 +6,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import { Toaster } from "sonner"
 
 const queryClient = new QueryClient()
 
@@ -16,6 +17,7 @@ function App() {
         <BrowserRouter>
           <AppRouting />
         </BrowserRouter>
+        <Toaster />
       </AuthProvider>
     </QueryClientProvider>
   )
