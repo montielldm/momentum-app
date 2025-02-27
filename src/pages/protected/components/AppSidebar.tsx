@@ -48,7 +48,7 @@ export function AppSidebar() {
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton tooltip={item.title} asChild>
                                         <Link to={item.url}>
-                                            <item.icon />
+                                            <item.icon className='dark:text-white text-neutral-500' />
                                             <span>{item.title}</span>
                                         </Link>
                                     </SidebarMenuButton>
