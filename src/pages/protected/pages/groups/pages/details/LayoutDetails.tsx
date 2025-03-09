@@ -7,7 +7,7 @@ export default function LayoutDetails() {
 
     return (
         <div>
-            <div className='p-1 border-b'>
+            <div className='p-1 border-b border-input bg-white'>
                 <SidebarGroup id={id!} />
             </div>
             <Outlet />

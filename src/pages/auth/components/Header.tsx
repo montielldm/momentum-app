@@ -1,4 +1,4 @@
-import MomentumLogo from "@/../public/momentum-logo.svg"
+import MomentumLogo from "@/assets/momentum-logo.svg"
 
 interface Props {
     title: string

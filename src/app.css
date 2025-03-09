@@ -1,5 +1,6 @@
+@import url('https://fonts.cdnfonts.com/css/segoe-pro');
+
 @import "tailwindcss";
-@import url('https://fonts.cdnfonts.com/css/segoe-ui-4');
 
 @plugin "tailwindcss-animate";
 
@@ -121,11 +122,10 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe Pro', sans-serif;
   }
 
   .h-screen-main {
     height: calc(100vh - 46px);
   }
 }
-

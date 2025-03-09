@@ -15,12 +15,10 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Separator } from '@/components/ui/separator'
 
 export default function LayoutProtected() {
     const navigate = useNavigate()    
     const { isAuthenticated } = useAuth()
-    console.log(isAuthenticated)
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -34,19 +32,17 @@ export default function LayoutProtected() {
             <main className='w-full h-screen'>
                 <div className='py-2 pl-2 pr-4 border-b flex items-center justify-between'>
                     <div className='flex items-center gap-4'>
-                        <SidebarTrigger className='cursor-pointer shadow-none'  variant="outline" />
-                        <div className='h-5 border-l' />
                         <Breadcrumb>
                             <BreadcrumbList>
                                 <BreadcrumbItem>
-                                <BreadcrumbLink>
-                                    <Link to="/app/groups">Inicio</Link>
+                                <BreadcrumbLink href='/app/groups'>
+                                    Inicio
                                 </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
-                                <BreadcrumbLink>
-                                    <Link to="/app/groups">Grupos</Link>
+                                <BreadcrumbLink href='/app/groups'>
+                                    Grupos
                                 </BreadcrumbLink>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
@@ -54,14 +50,14 @@ export default function LayoutProtected() {
                     </div>
                     <div className='flex items-center gap-4'>
                         <div className='flex items-center gap-2'>
-                            <Button variant="outline" size="icon_xs">
+                            <Button variant="outline" size="icon_sm">
                                 <Inbox className='dark:text-white text-neutral-500' size={12} />
                             </Button>
                         </div>
                         <UserMenu />
                     </div>
                 </div>
-                <div className='bg-white h-screen-main'>
+                <div className='bg-neutral-50 h-screen-main'>
                     <Outlet />
                 </div>
             </main>
