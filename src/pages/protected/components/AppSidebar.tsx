@@ -1,5 +1,5 @@
 import { Settings, LibraryBig } from "lucide-react"
-import Logo from '@/../public/momentum-logo.svg'
+import Logo from '@/assets/momentum-logo.svg'
 import { Separator } from "@/components/ui/separator"
 import {
     Sidebar,

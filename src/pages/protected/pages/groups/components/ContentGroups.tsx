@@ -1,6 +1,6 @@
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import useGroups from "../hooks/useGroups"
-import { columns } from "../columns/ColumnGroups"
+import { columns } from "../columns/ColumnsGroups"
 import { Badge } from "@/components/ui/badge"
 import { Link } from "react-router-dom"
 import { ArrowUpRight } from "lucide-react"
@@ -23,7 +23,7 @@ export default function ContentGroups() {
           const group = item.original
           return (
             <div key={group.id} className="">
-                  <div className="border rounded-sm bg-white">
+                  <div className="border rounded-md bg-white">
                     <div className="p-2">
                       <p className="font-semibold">{group.name}</p>
                       <div className="mt-1">

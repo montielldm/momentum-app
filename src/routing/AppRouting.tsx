@@ -15,6 +15,9 @@ import LayoutDetails from "@/pages/protected/pages/groups/pages/details/LayoutDe
 import FeedPage from "@/pages/protected/pages/groups/pages/details/pages/feed/FeedPage"
 import AssistencePage from "@/pages/protected/pages/groups/pages/details/pages/assistence/AssistencePage"
 import SettingsDetailsPage from "@/pages/protected/pages/groups/pages/details/pages/settings/SettingsPage"
+import ApprentincesGroupPage from "@/pages/protected/pages/groups/pages/details/pages/apprentinces/ApprentincesGroupPage"
+
+
 export default function AppRouting() {
   return (
     <Routes>
@@ -28,6 +31,7 @@ export default function AppRouting() {
           <Route element={<LayoutDetails />}>
             <Route path="/app/groups/:id/feed" element={<FeedPage />} />
             <Route path="/app/groups/:id/assistence" element={<AssistencePage />} />
+            <Route path="/app/groups/:id/apprentices" element={<ApprentincesGroupPage />} />
             <Route path="/app/groups/:id/settings" element={<SettingsDetailsPage />} />
           </Route>
 
